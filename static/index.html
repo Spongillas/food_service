@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Поиск поставщиков продуктов питания</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="hero">
+    <h1>🍲 Поиск поставщиков продуктов питания</h1>
+    <p>Опишите категорию товара и регион — ИИ найдёт в интернете подходящих поставщиков и соберёт по ним ключевую информацию, чтобы вам было проще решить, с кем связаться.</p>
+  </header>
+
+  <main class="container">
+    <form id="search-form" class="search-form">
+      <div class="field">
+        <label for="category">Категория товара *</label>
+        <input list="category-suggestions" id="category" name="category" required
+               placeholder="напр. упаковка для готовой еды" />
+        <datalist id="category-suggestions">
+          <option value="ингредиенты для выпечки"></option>
+          <option value="мясо и птица"></option>
+          <option value="молочная продукция"></option>
+          <option value="овощи и фрукты"></option>
+          <option value="специи и приправы"></option>
+          <option value="упаковка для готовой еды"></option>
+          <option value="одноразовая посуда"></option>
+          <option value="полуфабрикаты"></option>
+          <option value="напитки"></option>
+        </datalist>
+      </div>
+
+      <div class="field">
+        <label for="region">Город / регион</label>
+        <input id="region" name="region" placeholder="напр. Москва" />
+      </div>
+
+      <div class="field">
+        <label for="keywords">Пожелания (необязательно)</label>
+        <input id="keywords" name="keywords" placeholder="напр. нужен ХАССП, опт от 50 кг" />
+      </div>
+
+      <div class="field field-limit">
+        <label for="limit">Сколько найти</label>
+        <select id="limit" name="limit">
+          <option value="4">4</option>
+          <option value="6" selected>6</option>
+          <option value="8">8</option>
+        </select>
+      </div>
+
+      <button type="submit" id="submit-btn">Найти поставщиков</button>
+    </form>
+
+    <div id="banner" class="banner hidden"></div>
+
+    <div class="sort-bar hidden" id="sort-bar">
+      <span>Сортировать:</span>
+      <button data-sort="score" class="sort-btn active">По рекомендации</button>
+      <button data-sort="price" class="sort-btn">По цене</button>
+      <button data-sort="confidence" class="sort-btn">По надёжности данных</button>
+    </div>
+
+    <div id="status" class="status"></div>
+    <div id="results" class="results"></div>
+  </main>
+
+  <footer class="footer">
+    <p>Прототип: FastAPI + OpenRouter (веб-поиск ":online" + LLM-парсинг). Данные из открытых источников, перед контактом рекомендуем проверить актуальность.</p>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
