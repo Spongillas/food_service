@@ -41,17 +41,13 @@
         <input id="keywords" name="keywords" placeholder="напр. нужен ХАССП, опт от 50 кг" />
       </div>
 
-      <div class="field field-limit">
-        <label for="limit">Сколько найти</label>
-        <select id="limit" name="limit">
-          <option value="4">4</option>
-          <option value="6" selected>6</option>
-          <option value="8">8</option>
-        </select>
+      <div class="field field-btn">
+        <label class="field-btn-spacer" aria-hidden="true">&nbsp;</label>
+        <button type="submit" id="submit-btn">Найти поставщиков</button>
       </div>
-
-      <button type="submit" id="submit-btn">Найти поставщиков</button>
     </form>
+
+    <p class="form-note">Количество поставщиков в выдаче ограничено демо-версией (до 20 позиций за запрос), чтобы каждый поиск через ИИ оставался быстрым и не слишком дорогим.</p>
 
     <div id="banner" class="banner hidden"></div>
 
@@ -60,7 +56,17 @@
       <button data-sort="score" class="sort-btn active">По рекомендации</button>
       <button data-sort="price" class="sort-btn">По цене</button>
       <button data-sort="confidence" class="sort-btn">По надёжности данных</button>
+      <button type="button" id="score-info-toggle" class="info-link">как считается?</button>
     </div>
+    <p id="score-info" class="score-info hidden">
+      <strong>«По рекомендации»</strong> — оценка складывается из двух частей: 40% — насколько ИИ уверена,
+      что это реальная действующая компания и данные точны, 60% — насколько подробно заполнена карточка
+      (сайт, контакты, минимальный заказ, цена, сертификаты, условия доставки). Поставщик с наивысшей
+      оценкой в выдаче получает бейдж «Рекомендуем».<br />
+      <strong>«По надёжности данных»</strong> — только та самая уверенность ИИ (без учёта полноты карточки).
+      Поставщик может быть коротко описан, но ИИ уверена, что компания настоящая, — тогда он окажется выше
+      здесь, даже если по «рекомендации» ниже из-за пустых полей.
+    </p>
 
     <div id="status" class="status"></div>
     <div id="results" class="results"></div>

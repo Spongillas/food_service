@@ -1,5 +1,6 @@
 import json
-import re
+
+from pydantic import ValidationError
 
 from app.models import SearchRequest, Supplier
 from app.services.openrouter_client import OpenRouterError, chat_completion
@@ -129,9 +130,14 @@ async def find_suppliers(req: SearchRequest) -> tuple[list[Supplier], bool, str 
     try:
         content = await chat_completion(_build_messages(req))
         raw_items = _extract_json_array(content)
-        suppliers = [Supplier(**item) for item in raw_items]
+        suppliers: list[Supplier] = []
+        for item in raw_items:
+            try:
+                suppliers.append(Supplier(**item))
+            except (ValidationError, TypeError):
+                continue
         if not suppliers:
-            raise ValueError("Модель вернула пустой список")
+            raise ValueError("Модель не вернула ни одной корректной записи")
         return _rank(suppliers), True, None
     except (OpenRouterError, ValueError, json.JSONDecodeError, TypeError) as exc:
         fallback = _rank(_mock_suppliers(req))

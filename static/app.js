@@ -4,6 +4,10 @@ const statusEl = document.getElementById("status");
 const resultsEl = document.getElementById("results");
 const bannerEl = document.getElementById("banner");
 const sortBar = document.getElementById("sort-bar");
+const scoreInfoToggle = document.getElementById("score-info-toggle");
+const scoreInfo = document.getElementById("score-info");
+
+const DEFAULT_LIMIT = 6;
 
 let lastSuppliers = [];
 let currentSort = "score";
@@ -50,6 +54,7 @@ function renderCard(s) {
       ${s.recommended ? '<span class="badge">Рекомендуем</span>' : ""}
       <h3>${s.name}</h3>
       ${s.description ? `<div class="desc">${s.description}</div>` : ""}
+      ${s.source_url ? `<a class="source-link" href="${s.source_url}" target="_blank" rel="noopener">Источник →</a>` : ""}
       ${field("Регион", s.region)}
       ${field("Контакты", contacts || null)}
       ${field("Мин. заказ", s.min_order)}
@@ -57,11 +62,9 @@ function renderCard(s) {
       ${field("Сертификаты", s.certificates)}
       ${field("Доставка", s.delivery_terms)}
       ${field("Заметки", s.notes)}
+      ${field("Сайт", s.website, true)}
       <div class="score-bar"><div style="width:${scorePct}%"></div></div>
-      <div class="card-links">
-        ${s.website ? `<a href="${s.website}" target="_blank" rel="noopener">Сайт →</a>` : ""}
-        ${s.source_url ? `<a href="${s.source_url}" target="_blank" rel="noopener">Источник →</a>` : ""}
-      </div>
+      <div class="score-label">Оценка рекомендации: ${scorePct}%</div>
     </div>
   `;
 }
@@ -69,6 +72,11 @@ function renderCard(s) {
 function render(suppliers) {
   resultsEl.innerHTML = sortSuppliers(suppliers, currentSort).map(renderCard).join("");
 }
+
+scoreInfoToggle.addEventListener("click", () => {
+  const isHidden = scoreInfo.classList.toggle("hidden");
+  scoreInfoToggle.textContent = isHidden ? "как считается?" : "скрыть";
+});
 
 sortBar.addEventListener("click", (e) => {
   const btn = e.target.closest(".sort-btn");
@@ -85,7 +93,7 @@ form.addEventListener("submit", async (e) => {
     category: document.getElementById("category").value.trim(),
     region: document.getElementById("region").value.trim(),
     keywords: document.getElementById("keywords").value.trim(),
-    limit: parseInt(document.getElementById("limit").value, 10),
+    limit: DEFAULT_LIMIT,
   };
 
   submitBtn.disabled = true;
